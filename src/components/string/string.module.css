@@ -1,0 +1,19 @@
+.form {
+  display: flex;
+  gap: 12px;
+  margin: 0 auto;
+  width: 552px;
+}
+
+.content {
+  display: flex;
+  margin: 120px auto 0 auto;
+  padding: 0;
+  gap: 16px;
+  list-style: none;
+  width: fit-content;
+}
+
+.active {
+  border-color: #d252e1;
+}
