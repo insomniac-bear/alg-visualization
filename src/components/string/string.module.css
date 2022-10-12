@@ -2,7 +2,8 @@
   display: flex;
   gap: 12px;
   margin: 0 auto;
-  width: 552px;
+  max-width: 552px;
+  min-width: 300px;
 }
 
 .content {

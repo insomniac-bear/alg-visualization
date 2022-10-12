@@ -1,0 +1,23 @@
+.form {
+  display: flex;
+  gap: 12px;
+  margin: 0 auto;
+  max-width: 552px;
+  min-width: 300px;
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 48px 16px;
+
+  margin: 0 auto;
+  padding: 48px 0 0 0;
+
+  max-width: 944px;
+  min-width: 300px;
+  width: 100%;
+
+  list-style: none;
+}

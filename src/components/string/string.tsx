@@ -17,13 +17,13 @@ export const StringComponent: FC = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setValue(e.target.value)
-  }
+  };
 
   const handleForm = (evt: FormEvent): void => {
     evt.preventDefault();
     const arrOfSymbols = value.split('').map((it, index) => ({ id: index, value: it, status: 'Default' }));
     dispatch({ type: REVERSE, arr: arrOfSymbols });
-  }
+  };
 
   return (
     <SolutionLayout title="Строка">

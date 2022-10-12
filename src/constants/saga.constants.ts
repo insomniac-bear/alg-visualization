@@ -1,1 +1,2 @@
 export const REVERSE: 'REVERSE' = 'REVERSE';
+export const FIBONACCI: 'FIBONACCI' = 'FIBONACCI';
