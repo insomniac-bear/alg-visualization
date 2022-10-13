@@ -1,5 +1,9 @@
-import { swap } from './swap';
+import { generateArr } from './generate-arr';
+import { getRandom } from './get-random';
+import { resetElementsStatus } from './reset-element-status';
 
 export {
-  swap,
+  generateArr,
+  getRandom,
+  resetElementsStatus,
 };
