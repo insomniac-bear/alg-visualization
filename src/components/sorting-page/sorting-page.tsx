@@ -4,10 +4,10 @@ import { RadioInput } from "../ui/radio-input/radio-input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Direction } from "../../types/direction";
 import { useAppDispatch, useAppSelector } from "../../services/store";
-import { generateArray, getSortingArr } from "../../services/slices/sorting.slice";
+import { generateArray, getSortingArr, getStatus } from "../../services/slices/sorting.slice";
 import { Column } from "../ui/column/column";
 import styles from "./sorting.module.css";
-import { SELECTION_SORT } from "../../constants/saga.constants";
+import { BUBBLE_SORT, SELECTION_SORT } from "../../constants/saga.constants";
 
 export const SortingPage: FC = () => {
   const [sortingType, setSortingType] = useState('select');
@@ -23,15 +23,20 @@ export const SortingPage: FC = () => {
 
   const onAscendingSortingButtonClick = (evt: SyntheticEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    dispatch({ type: SELECTION_SORT, direction: Direction.Ascending });
+    if (sortingType === 'select') dispatch({ type: SELECTION_SORT, direction: Direction.Ascending });
+
+    if (sortingType === 'bubble') dispatch({ type: BUBBLE_SORT, direction: Direction.Ascending });
   }
 
   const onDescendingSortingButtonClick = (evt: SyntheticEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    dispatch({ type: SELECTION_SORT, direction: Direction.Descending });
+    if (sortingType === 'select') dispatch({ type: SELECTION_SORT, direction: Direction.Descending });
+
+    if (sortingType === 'bubble') dispatch({ type: BUBBLE_SORT, direction: Direction.Descending });
   }
 
   const array = useAppSelector(getSortingArr);
+  const isSort = useAppSelector(getStatus);
 
   return (
     <SolutionLayout title="Сортировка массива">
@@ -43,6 +48,7 @@ export const SortingPage: FC = () => {
             name="sortingType"
             checked={sortingType === "select"}
             onChange={checkRadioInput}
+            disabled={isSort}
           />
           <RadioInput
             label="Пузырёк"
@@ -50,6 +56,7 @@ export const SortingPage: FC = () => {
             name="sortingType"
             checked={sortingType === "bubble"}
             onChange={checkRadioInput}
+            disabled={isSort}
           />
         </fieldset>
         <div className={styles.buttonContainer}>
@@ -58,16 +65,22 @@ export const SortingPage: FC = () => {
               text="По возрастанию"
               sorting={Direction.Ascending}
               onClick={onAscendingSortingButtonClick}
+              disabled={isSort}
+              isLoader={isSort}
             />
             <Button
               text="По убыванию"
               sorting={Direction.Descending}
               onClick={onDescendingSortingButtonClick}
+              disabled={isSort}
+              isLoader={isSort}
             />
           </fieldset>
         <Button
           text= "Новый массив"
           onClick={() => dispatch(generateArray())}
+          disabled={isSort}
+          isLoader={isSort}
         />
         </div>
       </form>

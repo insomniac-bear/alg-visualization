@@ -10,7 +10,7 @@ interface IParams { direction: Direction; type: string };
 
 export function* selectionSortWorker(params: IParams) {
   yield put(start(true));
-  let arr: TSortingElement[] = yield select(getSortingArr);
+  const arr: TSortingElement[] = yield select(getSortingArr);
   if (arr[0].state === ElementStates.Modified) {
     const tempArr = [ ...resetElementsStatus(arr, ElementStates.Default) ];
     yield put(setSortingArr(tempArr));
