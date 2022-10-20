@@ -4,25 +4,62 @@ import { Button } from "../ui/button/button";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states"
-import { useAppSelector, useAppDispatch } from '../../services/store';
+import { DELAY_IN_MS } from "../../constants/delays";
+import { delay, swap } from "../../utils";
 import styles from "./string.module.css";
-import { getArrOfSymbols, getStatus } from "../../services/slices/revers-string.slice";
-import { REVERSE } from "../../constants/saga.constants";
+import { IArrElement } from "../../types/arr-element";
 
 export const StringComponent: FC = () => {
-  const [value, setValue] = useState('');
-  const dispatch = useAppDispatch();
-  const arrOfSymbols = useAppSelector(getArrOfSymbols);
-  const processStatus = useAppSelector(getStatus);
+  const [value, setValue] = useState<IArrElement<string>[]>([]);
+  const [reverseResult, setReverseResult] = useState<JSX.Element[]>([]);
+  const [isReverse, setIsReverse] = useState<boolean>(false);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setValue(e.target.value)
+  const renderResult = () => {
+    setReverseResult(value.map((item, index) => {
+      return (
+        <li key={index}>
+          <Circle
+            letter={item.value}
+            state={item.state}
+          />
+        </li>
+      );
+    }));
   };
 
-  const handleForm = (evt: FormEvent): void => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setValue(e.target.value.split('').map((item) => {
+      return {
+        value: item,
+        state: ElementStates.Default,
+      };
+    }));
+  };
+
+  const handleForm = async (evt: FormEvent) => {
     evt.preventDefault();
-    const arrOfSymbols = value.split('').map((it, index) => ({ id: index, value: it, status: 'Default' }));
-    dispatch({ type: REVERSE, arr: arrOfSymbols });
+    setIsReverse(true);
+    renderResult();
+    const arr = value;
+    let start = 0;
+    let end = arr.length - 1;
+
+    while (start <= end) {
+      await delay(DELAY_IN_MS);
+      arr[start].state = ElementStates.Changing;
+      arr[end].state = ElementStates.Changing;
+      setValue(arr);
+      renderResult();
+      await delay(DELAY_IN_MS);
+      swap<IArrElement<string>>(arr, start, end);
+      arr[start].state = ElementStates.Modified;
+      arr[end].state = ElementStates.Modified;
+      setValue(arr);
+      renderResult();
+      start++;
+      end--;
+    }
+    setIsReverse(false);
   };
 
   return (
@@ -30,33 +67,20 @@ export const StringComponent: FC = () => {
       <form className={styles.form} onSubmit={handleForm}>
         <Input
           maxLength={11}
-          max={'Максимум 11 символов'}
+          max={"Максимум 11 символов"}
           isLimitText={true}
-          value={value}
           onChange={handleChange}
         />
         <Button
           extraClass={styles.button}
           type="submit"
           text="Развернуть"
-          disabled={!value || processStatus}
-          isLoader={processStatus}
+          disabled={!value || isReverse}
+          isLoader={ isReverse }
         />
       </form>
       <ul className={styles.content}>
-        {
-          !!arrOfSymbols.length &&
-          arrOfSymbols.map((item) => {
-            return (
-              <li key={item.id}>
-                <Circle
-                  state={ElementStates[item.status]}
-                  letter={item.value}
-                />
-              </li>
-            )
-          })
-        }
+        { reverseResult }
       </ul>
     </SolutionLayout>
   );

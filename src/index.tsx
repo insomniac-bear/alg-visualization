@@ -1,7 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Provider } from 'react-redux';
-import { store } from './services/store';
 import "./index.css";
 import "./fonts/fonts.css";
 import "./components/ui/common.css";
@@ -10,9 +8,7 @@ import App from "./components/app/app";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+    <App />,
   document.getElementById("root")
 );
 

@@ -1,9 +1,13 @@
-import { generateArr } from './generate-arr';
-import { getRandom } from './get-random';
-import { resetElementsStatus } from './reset-element-status';
+import { generateArr } from "./generate-arr";
+import { getRandom } from "./get-random";
+import { delay } from "./delay";
+import { Stack } from "./stack";
+import { swap } from "./swap";
 
 export {
   generateArr,
   getRandom,
-  resetElementsStatus,
+  delay,
+  Stack,
+  swap,
 };

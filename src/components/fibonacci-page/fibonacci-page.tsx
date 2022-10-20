@@ -1,21 +1,35 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
-import { FIBONACCI } from "../../constants/saga.constants";
-import { getFibonacciRange, getStatus } from "../../services/slices/fibonacci.slice";
-import { useAppDispatch, useAppSelector } from "../../services/store";
+import { ElementStates } from "../../types/element-states";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
-import styles from './fibonacci.module.css';
+import { delay } from "../../utils/delay";
+import styles from "./fibonacci.module.css";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { IArrElement } from "../../types/arr-element";
 
 export const FibonacciPage: FC = () => {
-  const [value, setValue] = useState<number>();
-  const dispatch = useAppDispatch();
-  const fibonacciRange = useAppSelector(getFibonacciRange);
-  const processStatus = useAppSelector(getStatus);
+  const [ value, setValue ] = useState<number>(0);
+  const [ fibonacciResult, setFibonacciResult ] = useState<JSX.Element[]>([]);
+  const [isStart, setIsStart] = useState<boolean>(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setValue(Number(e.target.value))
+  };
+
+  const renderResult = (fibonacci: IArrElement<number>[]) => {
+    !!fibonacci.length && setFibonacciResult(fibonacci.map((item, index) => {
+      return (
+        <li key={index}>
+          <Circle
+            letter={`${item.value}`}
+            state={item.state}
+            tail={`${index}`}
+          />
+        </li>
+      );
+    }));
   };
 
   const checkValidity = () => {
@@ -26,9 +40,26 @@ export const FibonacciPage: FC = () => {
     return false;
   };
 
-  const handleForm = (evt: FormEvent): void => {
-    evt.preventDefault();
-    dispatch({ type: FIBONACCI, toNumber: value });
+    const handleForm = async (evt: FormEvent) => {
+      evt.preventDefault();
+      const fibonacci: IArrElement<number>[] = [];
+      setIsStart(true);
+      fibonacci.push({ value: 1, state: ElementStates.Default });
+      renderResult(fibonacci);
+      await delay(SHORT_DELAY_IN_MS);
+
+      for (let i = 1; i <= value; i++) {
+        await delay(SHORT_DELAY_IN_MS);
+        if (i < 2) {
+          fibonacci.push({ value: 1, state: ElementStates.Default });
+        } else {
+          fibonacci.push({ value: fibonacci[i - 1].value + fibonacci[i - 2].value, state: ElementStates.Default });
+
+        }
+        await delay(SHORT_DELAY_IN_MS);
+        renderResult(fibonacci);
+    }
+    setIsStart(false);
   };
 
   return (
@@ -40,30 +71,17 @@ export const FibonacciPage: FC = () => {
         max={19}
         isLimitText={true}
         maxLength={2}
-        value={value || ''}
         onChange={handleChange}
       />
       <Button
         type="submit"
         text="Рассчитать"
-        disabled={checkValidity() || processStatus}
-        isLoader={processStatus}
+        disabled={isStart || checkValidity()}
+        isLoader={isStart}
       />
      </form>
      <ul className={styles.content}>
-      {
-        !!fibonacciRange.length
-        && fibonacciRange.map((number) => {
-          return (
-            <li key={number.id}>
-              <Circle
-                letter={String(number.value)}
-                tail={String(number.id)}
-              />
-            </li>
-          );
-        })
-      }
+      { fibonacciResult }
      </ul>
     </SolutionLayout>
   );
