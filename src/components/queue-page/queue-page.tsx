@@ -4,7 +4,7 @@ import { QUEUE_SIZE } from "../../constants/queue";
 import { IArrElement } from "../../types/arr-element";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils";
-import { Queue } from "../../utils/queue";
+import { Queue } from "./queue";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
