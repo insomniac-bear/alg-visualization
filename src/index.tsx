@@ -1,4 +1,4 @@
-import React from "react";
+import { StrictMode } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import "./fonts/fonts.css";
@@ -8,7 +8,9 @@ import App from "./components/app/app";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
-    <App />,
+  <StrictMode>
+    <App />
+  </StrictMode>,
   document.getElementById("root")
 );
 

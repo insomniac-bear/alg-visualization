@@ -8,11 +8,13 @@ import { Direction } from "../../types/direction";
 import { ElementStates } from "../../types/element-states";
 import styles from "./sorting.module.css";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { SortingType } from "../../constants/sorting";
 import { IArrElement } from "../../types/arr-element";
 
 export const SortingPage: FC = () => {
-  const [ sortingType, setSortingType ] = useState("select");
+  const [ sortingType, setSortingType ] = useState(SortingType.Select);
   const [ arr, setArr ] = useState<IArrElement<number>[]>(generateArr());
+  const [ sortingDirection, setSortingDirection ] = useState<Direction>();
   const [ isStart, setIsStart ] = useState<boolean>(false);
 
   const generateButtonHandler = () => {
@@ -20,6 +22,7 @@ export const SortingPage: FC = () => {
   };
 
   const selectionSort = async (arr: IArrElement<number>[], direction: Direction) => {
+    setIsStart(true);
     const { length } = arr;
 
     for (let i = 0; i < length - 1; i++) {
@@ -50,9 +53,11 @@ export const SortingPage: FC = () => {
     }
     arr[length - 1].state = ElementStates.Modified;
     setArr([ ...arr ]);
+    setIsStart(false);
   };
 
   const bubbleSort = async (arr: IArrElement<number>[], direction: Direction) => {
+    setIsStart(true);
     const { length } = arr;
     for (let i = 0; i < length; i++) {
       for (let j = 0; j < length - i - 1; j++) {
@@ -75,6 +80,7 @@ export const SortingPage: FC = () => {
       arr[length - i - 1].state = ElementStates.Modified;
       setArr([ ...arr ]);
     }
+    setIsStart(false);
   }
 
   useEffect(() => {
@@ -82,39 +88,36 @@ export const SortingPage: FC = () => {
   }, []);
 
   const checkRadioInput = (evt: ChangeEvent<HTMLInputElement>) => {
-    setSortingType(evt.target.value);
+    const type = evt.target.value === SortingType.Select ? SortingType.Select : SortingType.Bubble;
+    setSortingType(type);
   };
 
   const onAscendingSortingButtonClick = (evt: SyntheticEvent<HTMLButtonElement>) => {
-    evt.preventDefault();
-    setIsStart(true);
+    setSortingDirection(Direction.Ascending);
     switch (sortingType) {
-      case "select":
-        arr && selectionSort(arr, Direction.Ascending);
+      case SortingType.Select:
+        arr && sortingDirection && selectionSort(arr, Direction.Ascending);
         break;
-      case "bubble":
-        arr && bubbleSort(arr, Direction.Ascending);
+      case SortingType.Bubble:
+        arr && sortingDirection && bubbleSort(arr, Direction.Ascending);
         break;
       default:
         return arr;
     }
-    setIsStart(false);
   }
 
   const onDescendingSortingButtonClick = (evt: SyntheticEvent<HTMLButtonElement>) => {
-    evt.preventDefault();
-    setIsStart(true);
+    setSortingDirection(Direction.Descending);
     switch (sortingType) {
-      case "select":
-        arr && selectionSort(arr, Direction.Descending);
+      case SortingType.Select:
+        arr && sortingDirection && selectionSort(arr, Direction.Descending);
         break;
-      case "bubble":
-        arr && bubbleSort(arr, Direction.Descending);
+      case SortingType.Bubble:
+        arr && sortingDirection && bubbleSort(arr, Direction.Descending);
         break;
       default:
         return arr;
     }
-    setIsStart(false);
   }
 
   return (
@@ -123,17 +126,17 @@ export const SortingPage: FC = () => {
         <fieldset className={styles.radioContainer}>
           <RadioInput
             label="Выбор"
-            value={"select"}
+            value={SortingType.Select}
             name="sortingType"
-            checked={sortingType === "select"}
+            checked={sortingType === SortingType.Select}
             onChange={checkRadioInput}
             disabled={isStart}
           />
           <RadioInput
             label="Пузырёк"
-            value={"bubble"}
+            value={SortingType.Bubble}
             name="sortingType"
-            checked={sortingType === "bubble"}
+            checked={sortingType === SortingType.Bubble}
             onChange={checkRadioInput}
             disabled={isStart}
           />
@@ -145,22 +148,24 @@ export const SortingPage: FC = () => {
               sorting={Direction.Ascending}
               onClick={onAscendingSortingButtonClick}
               disabled={isStart}
-              // isLoader={isSort}
+              isLoader={isStart && sortingDirection === Direction.Ascending}
+              extraClass={styles.button}
             />
             <Button
               text="По убыванию"
               sorting={Direction.Descending}
               onClick={onDescendingSortingButtonClick}
               disabled={isStart}
-              // isLoader={isSort}
+              isLoader={isStart && sortingDirection === Direction.Descending}
+              extraClass={styles.button}
             />
           </fieldset>
         <Button
           text= "Новый массив"
           onClick={generateButtonHandler}
           disabled={isStart}
-          // isLoader={isSort}
-        />
+          extraClass={styles.button}
+          />
         </div>
       </form>
       <ul className={styles.content}>

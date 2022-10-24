@@ -31,6 +31,9 @@
   composes: container;
   width: 651px;
 }
+.button {
+  min-width: 188px;
+}
 
 .content {
   margin: 0 auto;

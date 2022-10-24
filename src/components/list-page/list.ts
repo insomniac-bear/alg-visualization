@@ -1,24 +1,36 @@
 import { IList } from "../../types/list";
 
-export class Node<T> {
+export class LinkedListNode<T> {
   value: T;
-  next: Node<T> | null;
-  constructor(value: T, next?: Node<T> | null) {
+  next: LinkedListNode<T> | null;
+  constructor(value: T, next?: LinkedListNode<T> | null) {
     this.value = value;
     this.next = next === undefined ? null : next;
   }
 }
 
-export class List<T> implements IList<T> {
-  private head: Node<T> | null;
+export class LinkedList<T> implements IList<T> {
+  private head: LinkedListNode<T> | null;
   private size: number;
-  constructor() {
-    this.head = null;
-    this.size = 0;
+  constructor(initialArr?: T[]) {
+    if (initialArr) {
+      const { length } = initialArr;
+      let curr = new LinkedListNode(initialArr[length - 1]);
+      let temp;
+      for (let i = length - 2; i >= 0; i--) {
+        temp = new LinkedListNode<T>(initialArr[i], curr);
+        curr = temp;
+      }
+      this.head = curr;
+      this.size = length;
+    } else {
+      this.head = null;
+      this.size = 0;
+    }
   }
 
   append (element: T) {
-    const node = new Node(element);
+    const node = new LinkedListNode(element);
     let curr;
     if (this.head === null) {
       this.head = node;
@@ -32,11 +44,11 @@ export class List<T> implements IList<T> {
     this.size++;
   }
 
-  insertAt (element: T, index: number) {
+  addByIndex (element: T, index: number) {
     if (index <0 || index > this.size) {
       throw new Error("Enter a valid Index");
     } else {
-      const node = new Node(element);
+      const node = new LinkedListNode(element);
       if (index === 0) {
         node.next = this.head;
         this.head = node;
@@ -58,7 +70,7 @@ export class List<T> implements IList<T> {
     }
   }
 
-  deleteAt (index: number) {
+  deleteByIndex (index: number) {
     if (index <0 || index > this.size) {
       throw new Error("Enter a valid Index");
     } else {
@@ -92,7 +104,7 @@ export class List<T> implements IList<T> {
     }
   }
 
-  getValues (): T[] {
+  toArray (): T[] {
     let curr = this.head;
     const values: T[] = [];
     while (curr) {

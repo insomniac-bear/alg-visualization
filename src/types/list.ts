@@ -1,13 +1,13 @@
-import { Node } from "../components/list-page/list";
+import { LinkedListNode } from "../components/list-page/list";
 
 export interface IList<T> {
   append: (element: T) => void;
-  insertAt: (element: T, index: number) => void;
-  deleteAt: (index: number) => void;
+  addByIndex: (element: T, index: number) => void;
+  deleteByIndex: (index: number) => void;
   deleteHead: () => void;
-  getValues: () => T[];
+  toArray: () => T[];
   getSize: () => number;
-  getHead: () => Node<T> | null;
+  getHead: () => LinkedListNode<T> | null;
 };
 
 export enum ListActionStates {
