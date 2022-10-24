@@ -10,6 +10,7 @@ import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import styles from "./stack.module.css";
 
 const stack = new Stack<string>();
+const MAX_STACK_SIZE = 9;
 
 export const StackPage: FC = () => {
   const [ value, setValue ] = useState("");
@@ -79,9 +80,17 @@ export const StackPage: FC = () => {
     setStackState(currentStackElements);
     setIsRemoveStart(false);
   };
+  /**
+   * TODO
+   * Что бы не вызывать каждый раз функцию renderStack после каждого изменения stackState, функция помещена в useEffect.
+   * Во избежании множественного ререндера зависимость renderStack не передается
+   */
   useEffect(() => {
     if (stackState) renderStack();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stackState]);
+
+  const isAddButtonDisabled = isAddStart || isRemoveStart || !value || stack.getSize() === MAX_STACK_SIZE;
 
   return (
     <SolutionLayout title="Стек">
@@ -100,7 +109,7 @@ export const StackPage: FC = () => {
           <Button
             text="Добавить"
             onClick={addButtonHandler}
-            disabled={isAddStart || isRemoveStart || !value}
+            disabled={isAddButtonDisabled}
             isLoader={isAddStart}
           />
           <Button
