@@ -129,7 +129,7 @@ export const ListPage: FC = () => {
     list.deleteHead();
     setListState(list.toArray().map((listItem, index) => ({
       value: listItem,
-      state: index === LIST_HEAD_INDEX ? ElementStates.Modified : ElementStates.Default,
+      state: ElementStates.Default,
       sTail: false
     })));
     setValue("");
@@ -188,7 +188,7 @@ export const ListPage: FC = () => {
     for (let i = LIST_HEAD_INDEX; i <= tailIndex; i++) {
       setListState(list.toArray().map((listItem, index) => ({
         value: listItem,
-        state: index <= i ? ElementStates.Changing : ElementStates.Default,
+        state: index < i ? ElementStates.Changing : ElementStates.Default,
         isTail: i === tailIndex && index === tailIndex ? true : false
       })));
       await delay(SHORT_DELAY_IN_MS);

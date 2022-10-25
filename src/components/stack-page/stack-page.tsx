@@ -7,10 +7,10 @@ import { IArrElement } from "../../types/arr-element";
 import { ElementStates } from "../../types/element-states";
 import { delay, Stack } from "../../utils";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { MAX_STACK_ITEM_LENGTH, MAX_STACK_SIZE } from "../../constants/stack";
 import styles from "./stack.module.css";
 
 const stack = new Stack<string>();
-const MAX_STACK_SIZE = 9;
 
 export const StackPage: FC = () => {
   const [ value, setValue ] = useState("");
@@ -98,7 +98,7 @@ export const StackPage: FC = () => {
         <fieldset className={styles.input_container}>
           <Input
             type="text"
-            maxLength={4}
+            maxLength={MAX_STACK_ITEM_LENGTH}
             max={"Максимум - 4 символа"}
             isLimitText={true}
             value={value}

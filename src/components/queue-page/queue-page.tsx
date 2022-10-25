@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, SyntheticEvent, useEffect, useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
-import { QUEUE_SIZE } from "../../constants/queue";
+import { QUEUE_SIZE, MAX_QUEUE_ITEM_LENGTH } from "../../constants/queue";
 import { IArrElement } from "../../types/arr-element";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils";
@@ -99,7 +99,7 @@ export const QueuePage: FC = () => {
         <fieldset className={styles.input_container}>
           <Input
             type="text"
-            maxLength={4}
+            maxLength={MAX_QUEUE_ITEM_LENGTH}
             max={"Максимум - 4 символа"}
             isLimitText={true}
             value={value}

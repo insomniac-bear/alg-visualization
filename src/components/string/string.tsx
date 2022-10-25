@@ -5,9 +5,10 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states"
 import { DELAY_IN_MS } from "../../constants/delays";
+import { MAX_STRING_LENGTH } from "../../constants/string";
 import { delay, swap } from "../../utils";
-import styles from "./string.module.css";
 import { IArrElement } from "../../types/arr-element";
+import styles from "./string.module.css";
 
 export const StringComponent: FC = () => {
   const [value, setValue] = useState<IArrElement<string>[]>([]);
@@ -66,7 +67,7 @@ export const StringComponent: FC = () => {
     <SolutionLayout title="Строка">
       <form className={styles.form} onSubmit={handleForm}>
         <Input
-          maxLength={11}
+          maxLength={MAX_STRING_LENGTH}
           max={"Максимум 11 символов"}
           isLimitText={true}
           onChange={handleChange}
