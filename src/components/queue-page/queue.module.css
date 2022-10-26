@@ -1,0 +1,37 @@
+.form {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 829px;
+  min-width: 300px;
+  width: 100%;
+}
+
+.input_container {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 650px;
+  min-width: 300px;
+  width: 100%;
+  border: none;
+}
+
+.input {
+  max-width: 377px;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 120px auto 0 auto;
+  padding: 0;
+  gap: 17px;
+  list-style: none;
+  width: fit-content;
+  max-width: 650px;
+  min-width: 300px;
+}
