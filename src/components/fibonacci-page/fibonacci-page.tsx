@@ -55,7 +55,7 @@ export const FibonacciPage: FC = () => {
       <Button
         type="submit"
         text="Рассчитать"
-        disabled={isStart || !checkValidity(value, MIN_FIBONACCI_COUNT, MAX_FIBONACCI_COUNT)}
+        disabled={isStart || !checkValidity(value, MIN_FIBONACCI_COUNT, MAX_FIBONACCI_COUNT) || value <= 0}
         isLoader={isStart}
       />
      </form>
