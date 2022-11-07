@@ -6,10 +6,10 @@ import { Column } from "../ui/column/column";
 import { delay, generateArr, swap } from "../../utils";
 import { Direction } from "../../types/direction";
 import { ElementStates } from "../../types/element-states";
-import styles from "./sorting.module.css";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { SortingType } from "../../constants/sorting";
 import { IArrElement } from "../../types/arr-element";
+import styles from "./sorting.module.css";
 
 export const SortingPage: FC = () => {
   const [ sortingType, setSortingType ] = useState(SortingType.Select);

@@ -6,12 +6,14 @@ import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states"
 import { DELAY_IN_MS } from "../../constants/delays";
 import { MAX_STRING_LENGTH } from "../../constants/string";
-import { delay, swap } from "../../utils";
+import { delay } from "../../utils";
+import { reversString } from "./util";
 import { IArrElement } from "../../types/arr-element";
 import styles from "./string.module.css";
 
 export const StringComponent: FC = () => {
   const [value, setValue] = useState<IArrElement<string>[]>([]);
+  const [userInput, setUserInput] = useState("");
   const [reverseResult, setReverseResult] = useState<JSX.Element[]>([]);
   const [isReverse, setIsReverse] = useState<boolean>(false);
 
@@ -29,6 +31,7 @@ export const StringComponent: FC = () => {
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setUserInput(e.target.value);
     setValue(e.target.value.split('').map((item) => {
       return {
         value: item,
@@ -40,6 +43,7 @@ export const StringComponent: FC = () => {
   const handleForm = async (evt: FormEvent) => {
     evt.preventDefault();
     setIsReverse(true);
+    const reversedString = reversString(userInput);
     renderResult();
     const arr = value;
     let start = 0;
@@ -52,7 +56,8 @@ export const StringComponent: FC = () => {
       setValue(arr);
       renderResult();
       await delay(DELAY_IN_MS);
-      swap<IArrElement<string>>(arr, start, end);
+      arr[start].value = reversedString[start];
+      arr[end].value = reversedString[end];
       arr[start].state = ElementStates.Modified;
       arr[end].state = ElementStates.Modified;
       setValue(arr);
@@ -76,7 +81,7 @@ export const StringComponent: FC = () => {
           extraClass={styles.button}
           type="submit"
           text="Развернуть"
-          disabled={!value || isReverse}
+          disabled={!value.length || isReverse}
           isLoader={ isReverse }
         />
       </form>
